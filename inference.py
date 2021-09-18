@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import tensorflow as tf
+from utils.py import fit_fraction
 
 
 class DatasetLoader:
@@ -380,7 +381,7 @@ def inference(tf_records_path):
             cos_theta = np.concatenate(cos_theta, 0)
             break
     theta_bins = np.histogramdd(cos_theta, 10, ((-1, 1), (-1, 1)), density=True)[0] * (2 / 10) ** 2
-    print(theta_bins)
+    fit_fraction(theta_bins, 'TRANS', '13tev')
 
 
 if __name__ == '__main__':
