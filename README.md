@@ -3,17 +3,17 @@ Measure WWjj polarization fraction
 
 Paper:xxxxxxxxxxxxxx
 
+#### Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@scu.stu.edu.cn](zhangrao@scu.stu.edu.cn)
+
 ## Requirements
 * Both Linux and Windows are supported.
 * 64-bit Python3.6(or higher) installation.
 * Tensorflow2.x(recommend 2.4), Numpy.
-* One or more high-end NVIDIA GPUs(at least 8 GB of DRAM for reproduce the results reported in the paper, or at least 4 GB of DRAM for use pre-trained models), NVIDIA drivers, CUDA 11.0 toolkit and cuDNN 8.0.
+* One or more high-end NVIDIA GPUs(at least 4 GB of DRAM for use pre-trained models), NVIDIA drivers, CUDA 11.0 toolkit and cuDNN 8.0.
 
-## Using pre-trained models
-* Pre-training weights are placed in `./weights/`.
+## Prepare dataset
 * The dataset is stored in `./raw/`, the data structure is as follows:
-```cpp
-/*
+```
 One event for every 6 lines:
    1. first lepton 
    2. second lepton 
@@ -32,6 +32,10 @@ The format of an event in the dataset is as follows:
    0   -22.6711  52.8976   -422.567  426.468
    6   -49.9758  29.3283   274.517   294.098
    ...
-*/
 ```
 ParticleID: 1 for electron, 2 for muon, 3 for tau, 4 for b-jet, 5 for normal jet, 0 for met, 6 for remaining jets, 7 for forward backward jet, signs represent electric charge.
+* Use the command `python create_dataset YOUR_RAWDATA_PATH`
+## Using pre-trained models
+* Pre-training weights are placed in `./weights/`.
+
+* 123
