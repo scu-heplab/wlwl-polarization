@@ -3,7 +3,7 @@ Measure WWjj polarization fraction
 
 Paper:xxxxxxxxxxxxxx
 
-#### Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@scu.stu.edu.cn](mailto:zhangrao@scu.stu.edu.cn).
+#### Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).
 
 ## Requirements
 * Both Linux and Windows are supported.
@@ -12,7 +12,8 @@ Paper:xxxxxxxxxxxxxx
 * One or more high-end NVIDIA GPUs(at least 4 GB of DRAM), NVIDIA drivers, CUDA 11.0 toolkit and cuDNN 8.0.
 
 ## Prepare dataset
-* The dataset is stored in `./raw/`, the data structure is as follows:
+The raw dataset needs to be transformed before it can be imported into the model.
+* We provide a test event, stored in `./raw/`, the data structure is as follows:
 ```
 One event for every 6 lines:
    1. first lepton 
