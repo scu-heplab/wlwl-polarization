@@ -3,13 +3,13 @@ Measure WWjj polarization fraction
 
 Paper:xxxxxxxxxxxxxx
 
-#### Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@scu.stu.edu.cn](zhangrao@scu.stu.edu.cn)
+#### Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@scu.stu.edu.cn](mailto:zhangrao@scu.stu.edu.cn).
 
 ## Requirements
 * Both Linux and Windows are supported.
 * 64-bit Python3.6(or higher) installation.
 * Tensorflow2.x(recommend 2.4), Numpy.
-* One or more high-end NVIDIA GPUs(at least 4 GB of DRAM for use pre-trained models), NVIDIA drivers, CUDA 11.0 toolkit and cuDNN 8.0.
+* One or more high-end NVIDIA GPUs(at least 4 GB of DRAM), NVIDIA drivers, CUDA 11.0 toolkit and cuDNN 8.0.
 
 ## Prepare dataset
 * The dataset is stored in `./raw/`, the data structure is as follows:
