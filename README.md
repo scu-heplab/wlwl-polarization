@@ -44,13 +44,13 @@ ParticleID: 1 for electron, 2 for muon, 3 for tau, 4 for b-jet, 5 for normal jet
 ## Using pre-trained models
 After completing the preparation of the dataset, you can use the model to predict the polarization fraction.
 * Pre-trained weights are placed in `./weights/`.
-* Use the command `python model YOUR_TRADATA_NAME`, it will give the polarization fraction and save the predicted cos$\theta$ distribution in `./result/YOUR_TRADATA_NAME/`.
+* Use the command `python inference YOUR_TRADATA_NAME`, it will give the polarization fraction and save the predicted cos$\theta$ distribution in `./result/YOUR_TRADATA_NAME/`.
 * (__Optional__) Use the command `python analysis YOUR_TRADATA_NAME`, it will give the error range of the prediction, similar to Fig.xx in our paper.
 ## Example
 Run the following command to get the polarization fraction of the standard model:
 ```
 python create_dataset ./raw/sm.dat
-python model sm
+python inference sm
 (optional) python analysis sm
 ```
 ## Citation
