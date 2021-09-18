@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import tensorflow as tf
 
@@ -142,6 +143,115 @@ class FeedForward(tf.keras.layers.Layer):
         return outer
 
 
+class Normalization(tf.keras.layers.Layer):
+    def __init__(self, **kwargs):
+        super(Normalization, self).__init__(**kwargs)
+
+    def build(self, input_shape):
+        super(Normalization, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        return inputs / tf.sqrt(tf.reduce_mean(tf.square(inputs), -1, True) + 1e-6)
+
+
+class LinearInterpolation(tf.keras.layers.Layer):
+    def __init__(self, scale=2, **kwargs):
+        super(LinearInterpolation, self).__init__(**kwargs)
+        self.scale = scale
+
+    def build(self, input_shape):
+        rate = (input_shape[-1] - 1) / (int(input_shape[-1] * self.scale) - 1)
+        corr = tf.cast(tf.range(0, int(input_shape[-1] * self.scale)), tf.float32)
+        center = tf.reshape(rate * corr, [1, 1, int(input_shape[-1] * self.scale)])
+        self.center = tf.tile(center, [1, input_shape[1], 1])
+        self.low = tf.math.floor(self.center)
+        self.top = tf.math.ceil(self.center)
+        super(LinearInterpolation, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        shape = tf.shape(inputs)
+        indices = tf.stack(tf.meshgrid(tf.range(0, shape[0]), tf.range(0, shape[1]), indexing='ij'), -1)[..., tf.newaxis, :]
+        indices = tf.cast(tf.tile(indices, [1, 1, self.center.shape[-1], 1]), tf.float32)
+        low_indices = tf.concat([indices, tf.tile(self.low[..., tf.newaxis], [tf.shape(inputs)[0], 1, 1, 1])], -1)
+        top_indices = tf.concat([indices, tf.tile(self.top[..., tf.newaxis], [tf.shape(inputs)[0], 1, 1, 1])], -1)
+        low_value = tf.gather_nd(inputs, tf.cast(low_indices, tf.int32))
+        top_value = tf.gather_nd(inputs, tf.cast(top_indices, tf.int32))
+        value = tf.where(self.low == self.top, low_value,
+                         ((self.top - self.center) * low_value + (self.center - self.low) * top_value) / (self.top - self.low + 1e-3))
+        return value
+
+
+class StyleBlock2(tf.keras.layers.Layer):
+    def __init__(self, filters, kernel_size, demod=True, upsample=False, **kwargs):
+        super(StyleBlock2, self).__init__(**kwargs)
+        self.filters = filters
+        self.kernel_size = kernel_size
+        self.demod = demod
+        self.upsample = upsample
+
+    def build(self, input_shape):
+        latent_shape, content_shape = input_shape
+        self.affine_weight = self.add_weight('affine_weight', (latent_shape[-1], content_shape[1]), initializer=tf.initializers.get('glorot_uniform'))
+        self.affine_bias = self.add_weight('affine_bias', (1, content_shape[1]), initializer=tf.initializers.get('zeros'))
+        self.kernel_weight = self.add_weight('kernel_weight', (self.kernel_size, content_shape[1], self.filters), initializer=tf.initializers.get('he_normal'))
+        self.kernel_bias = self.add_weight('kernel_bias', (1, self.filters, 1), initializer=tf.initializers.get('zeros'))
+        if self.upsample:
+            self.linear = LinearInterpolation()
+        super(StyleBlock2, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        latent, content = inputs
+        affine = tf.einsum("bi,ij->bj", latent, self.affine_weight) + self.affine_bias
+        kernel_weight = self.kernel_weight[tf.newaxis] * affine[:, tf.newaxis, :, tf.newaxis]
+        if self.demod:
+            kernel_weight = kernel_weight / tf.sqrt(tf.reduce_sum(tf.square(kernel_weight), (1, 2), True) + 1e-8)
+        weight = tf.reshape(tf.transpose(kernel_weight, [1, 2, 0, 3]), [kernel_weight.shape[1], kernel_weight.shape[2], -1])
+        if self.upsample:
+            content = self.linear(content)
+        content = tf.reshape(content, [1, -1, content.shape[-1]])
+        feature = tf.nn.conv1d(content, weight, [1, 1, 1], 'SAME', 'NCW')
+        feature = tf.reshape(feature, [-1, self.filters, feature.shape[-1]]) + self.kernel_bias
+        return tf.nn.leaky_relu(feature, 0.2)
+
+
+class ResidualBlock(tf.keras.layers.Layer):
+    def __init__(self, filters, **kwargs):
+        super(ResidualBlock, self).__init__(**kwargs)
+        self.filters = filters
+
+    def build(self, input_shape):
+        self.linear1 = LinearInterpolation(0.5)
+        self.first_conv = tf.keras.layers.Conv1D(self.filters, 3, 1, 'same', 'channels_first', activation=tf.nn.leaky_relu, kernel_initializer='he_normal')
+        self.second_conv = tf.keras.layers.Conv1D(self.filters, 3, 1, 'same', 'channels_first', activation=tf.nn.leaky_relu, kernel_initializer='he_normal')
+        self.linear2 = LinearInterpolation(0.5)
+        self.short_conv = tf.keras.layers.Conv1D(self.filters, 1, 1, 'valid', 'channels_first', activation=tf.nn.leaky_relu, kernel_initializer='he_normal')
+        super(ResidualBlock, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        short = self.linear2(inputs)
+        short = self.short_conv(short)
+        main = self.first_conv(inputs)
+        main = self.linear1(main)
+        main = self.second_conv(main)
+        return (short + main) / tf.sqrt(2.0)
+
+
+class MergeCondition(tf.keras.layers.Layer):
+    def __init__(self, **kwargs):
+        super(MergeCondition, self).__init__(**kwargs)
+
+    def build(self, input_shape):
+        self.transfer_weight = self.add_weight('transfer_weight', (input_shape[0][-1], input_shape[1][-1]), tf.float32, tf.initializers.get('he_normal'))
+        self.transfer_bias = self.add_weight('transfer_bias', (1, input_shape[1][-1]), tf.float32, tf.initializers.get('zeros'))
+        super(MergeCondition, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        condition, feature = inputs
+        transfer = tf.einsum("bi,ij->bj", condition, self.transfer_weight) + self.transfer_bias
+        merge = tf.nn.leaky_relu(tf.einsum("bni,bi->bn", feature, transfer))
+        return merge
+
+
 class ClassifyModel:
     def __init__(self, particle_nums, embedding_size=512, head_nums=8, head_size=64, hide_dim=1024):
         identity_inputs = tf.keras.layers.Input((particle_nums,))
@@ -188,3 +298,90 @@ class ClassifyModel:
 
     def load_model(self, path):
         self.classify.load_weights(path + 'classify.h5', True, True)
+
+
+class GenerateModel:
+    def __init__(self, noise_dim, particle_nums=6, embedding_size=64, head_nums=4, head_size=16, hide_dim=128, condition_weight_dir_path=None):
+        self.noise_dim = noise_dim
+        self.condition = ClassifyModel(particle_nums, embedding_size, head_nums, head_size, hide_dim).get_model(condition_weight_dir_path)
+
+        condition_inputs = tf.keras.layers.Input((embedding_size,))
+
+        def get_mapping(inputs, unit, activate, layer_nums=8):
+            x = Normalization()(inputs)
+            for i in range(layer_nums):
+                x = tf.keras.layers.Dense(unit, activate, kernel_initializer='he_normal')(x)
+            return x
+
+        noise_inputs = tf.keras.layers.Input((64, noise_dim))
+        condition = get_mapping(condition_inputs, embedding_size, tf.nn.relu, 8)
+        content = StyleBlock2(64, 3)([condition, noise_inputs])
+        content = StyleBlock2(64, 3)([condition, content])
+        theta = StyleBlock2(2, 1, False)([condition, content])
+        content = StyleBlock2(64, 3)([condition, content])
+        content = StyleBlock2(64, 3, upsample=True)([condition, content])
+        add = LinearInterpolation()(theta)
+        theta = StyleBlock2(2, 1, False)([condition, content])
+        theta = tf.keras.layers.Add()([add, theta])
+        content = StyleBlock2(32, 3)([condition, content])
+        content = StyleBlock2(32, 3, upsample=True)([condition, content])
+        add = LinearInterpolation()(theta)
+        theta = StyleBlock2(2, 1, False)([condition, content])
+        theta = tf.keras.layers.Add()([add, theta])
+        content = StyleBlock2(16, 3)([condition, content])
+        content = StyleBlock2(16, 3, upsample=True)([condition, content])
+        add = LinearInterpolation()(theta)
+        theta = StyleBlock2(2, 1, False)([condition, content])
+        theta = tf.keras.layers.Add()([add, theta])
+
+        self.generator = tf.keras.Model(inputs=[condition_inputs, noise_inputs], outputs=theta)
+        self.generator.summary()
+
+    def predict(self, tf_records_path):
+        dataset = DatasetLoader(tf_records_path, 256, 1)
+        pf = []
+        nf = []
+        while True:
+            try:
+                identity, momentum, mask = dataset.get_batch()
+                condition = self.condition([identity, momentum, mask], training=False)
+                noise_inputs = tf.random.normal((tf.shape(mask)[0], 64, self.noise_dim))
+                fake_theta = self.generator([condition, noise_inputs])
+
+                fake_theta = tf.reduce_mean(fake_theta, -1)
+                pf.append(fake_theta[:, 0])
+                nf.append(fake_theta[:, 1])
+            except StopIteration:
+                pf = np.concatenate(pf, 0)
+                nf = np.concatenate(nf, 0)
+                break
+
+    def get_model(self, path=None):
+        if path is not None:
+            self.load_model(path)
+        return self.condition, self.generator
+
+    def load_model(self, path):
+        self.condition.load_weights(path + 'classify.h5', True, True)
+        self.generator.set_weights(np.load(path + 'generator.npy', allow_pickle=True))
+
+
+def inference(tf_records_path):
+    cos_theta = []
+    dataset = DatasetLoader(tf_records_path, 256, 1)
+    condition, generator = GenerateModel(64).get_model('./weights/')
+    while True:
+        try:
+            identity, momentum, mask = dataset.get_batch()
+            cond = condition([identity, momentum, mask], training=False)
+            noise = tf.random.normal((tf.shape(mask)[0], 64, 64))
+            cos_theta.append(tf.reduce_mean(generator([cond, noise]), -1))
+        except StopIteration:
+            cos_theta = np.concatenate(cos_theta, 0)
+            break
+    theta_bins = np.histogramdd(cos_theta, 10, ((-1, 1), (-1, 1)), density=True)[0] * (2 / 10) ** 2
+    print(theta_bins)
+
+
+if __name__ == '__main__':
+    inference('')
