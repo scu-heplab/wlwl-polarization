@@ -31,12 +31,12 @@ Each line has the following five columns of elements:
    1.ParticleID  2.Px  3.Py  4.Pz  5.E
 The format of an event in the dataset is as follows:
    ...
-   -1  166.023   5.35817   10.784    166.459
-   1   -36.1648  -64.1513  -28.9064  79.113
-   7   -11.3233  -39.6316  -318.178  320.85
-   7   -34.2795  22.0472   622.79    624.128
-   0   -22.6711  52.8976   -422.567  426.468
-   6   -49.9758  29.3283   274.517   294.098
+   -1.0  166.023   5.35817   10.784    166.459
+   1.0   -36.1648  -64.1513  -28.9064  79.113
+   7.0   -11.3233  -39.6316  -318.178  320.85
+   7.0   -34.2795  22.0472   622.79    624.128
+   0.0   -22.6711  52.8976   -422.567  426.468
+   6.0   -49.9758  29.3283   274.517   294.098
    ...
 ```
 ParticleID: 1 for electron, 2 for muon, 3 for tau, 4 for b-jet, 5 for normal jet, 0 for met, 6 for remaining jets, 7 for forward backward jet, signs represent electric charge.
