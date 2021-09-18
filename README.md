@@ -13,7 +13,7 @@ Paper:xxxxxxxxxxxxxx
 
 ## Prepare dataset
 The raw dataset needs to be transformed before it can be imported into the model.
-* We provide a test event, stored in `./raw/`, the data structure is as follows:
+* You need to create a raw dataset(we provide a test event, stored in `./raw/`), the data structure is as follows:
 ```
 One event for every 6 lines:
    1. first lepton 
@@ -35,7 +35,7 @@ The format of an event in the dataset is as follows:
    ...
 ```
 ParticleID: 1 for electron, 2 for muon, 3 for tau, 4 for b-jet, 5 for normal jet, 0 for met, 6 for remaining jets, 7 for forward backward jet, signs represent electric charge.
-* Use the command `python create_dataset YOUR_RAWDATA_PATH`
+* Use the command `python create_dataset YOUR_RAWDATA_PATH`, it will create a file with the same name as `YOUR_RAWDATA_PATH` in the `./dataset/`.
 ## Using pre-trained models
 * Pre-training weights are placed in `./weights/`.
 
