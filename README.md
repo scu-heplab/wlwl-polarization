@@ -3,7 +3,7 @@ Measure WWjj polarization fraction
 
 Paper:xxxxxxxxxxxxxx
 
-#### Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).
+___Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).___
 
 ## Requirements
 * Both Linux and Windows are supported.
@@ -13,8 +13,13 @@ Paper:xxxxxxxxxxxxxx
 
 ## Prepare dataset
 The raw dataset needs to be transformed before it can be imported into the model.
-* You need to create a raw dataset(we provide a test event, stored in `./raw/`), the data structure is as follows:
+* You need to create a raw dataset(we provide a test dataset, stored in `./raw/`), the data structure is as follows:
 ```
+The file has N events
+   Event 1
+   Event 2
+   ...
+   Event N
 One event for every 6 lines:
    1. first lepton 
    2. second lepton 
@@ -37,6 +42,19 @@ The format of an event in the dataset is as follows:
 ParticleID: 1 for electron, 2 for muon, 3 for tau, 4 for b-jet, 5 for normal jet, 0 for met, 6 for remaining jets, 7 for forward backward jet, signs represent electric charge.
 * Use the command `python create_dataset YOUR_RAWDATA_PATH`, it will create a file with the same name as `YOUR_RAWDATA_PATH` in the `./dataset/`.
 ## Using pre-trained models
-* Pre-training weights are placed in `./weights/`.
-
-* 123
+After completing the preparation of the dataset, you can use the model to predict the polarization fraction.
+* Pre-trained weights are placed in `./weights/`.
+* Use the command `python model YOUR_TRADATA_NAME`, it will give the polarization fraction and save the predicted cos\theta distribution in `./result/YOUR_TRADATA_NAME/`.
+* (__Optional__) Use the command `python analysis YOUR_TRADATA_NAME`, it will give the error range of the prediction, similar to Fig.xx in our paper.
+## Example
+Run the following command to get the polarization fraction of the standard model:
+```
+python create_dataset ./raw/sm.dat
+python model sm
+(optional) python analysis sm
+```
+## Citation
+```
+@dlkajflkds{
+}
+```
