@@ -18,7 +18,7 @@ ___Notice: This code can only use the inference process, if you want to train yo
 * Tensorflow2.x(recommend 2.4), Numpy.
 * One or more high-end NVIDIA GPUs(at least 4 GB of DRAM), NVIDIA drivers, CUDA 11.0 toolkit and cuDNN 8.0.
 
-## Prepare dataset
+## Preparing dataset
 The raw dataset needs to be transformed before it can be imported into the model.
 * You need to create a raw dataset(we provide a test dataset, stored in `./raw/`), the data structure is as follows:
 ```
