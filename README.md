@@ -1,7 +1,11 @@
 # WlWl Polarization
 Measure WWjj polarization fraction 
 
-<img src="https://github.com/scu-heplab/wlwl-polarization/blob/main/result/result_decorr_ch00.pdf" width="400" height="400"/><br/>
+<figure>
+<img src="https://github.com/scu-heplab/wlwl-polarization/blob/main/result/sm.png" width="400px" height="400px"/>
+<img src="https://github.com/scu-heplab/wlwl-polarization/blob/main/result/sm_lltt.png" width="400px" height="400px"/>
+<img src="https://github.com/scu-heplab/wlwl-polarization/blob/main/result/sm_lttl.png" width="400px" height="400px"/>
+</figure>
 
 Paper:xxxxxxxxxxxxxx
 
