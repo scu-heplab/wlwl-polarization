@@ -1,5 +1,5 @@
 # WlWl Polarization
-Measure WWjj polarization fraction 
+__<p align=center>Measure WWjj polarization fraction</p>__
 
 <div align=center>
    <figure>
