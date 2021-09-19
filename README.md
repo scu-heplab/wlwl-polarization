@@ -3,9 +3,9 @@ Measure WWjj polarization fraction
 
 <div align=center>
    <figure>
-      <img src="./result/sm.png" />
-      <img src="./result/sm_lltt.png" />
-      <img src="./result/sm_lttl.png" />
+      <img src="./result/sm.png" alt="sm"/>
+      <img src="./result/sm_lltt.png" alt="sm_lltt"/>
+      <img src="./result/sm_lttl.png" alt="sm_lttl"/>
    </figure>
 </div>
 
