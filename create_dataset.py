@@ -19,4 +19,6 @@ def txt2tfrecords(data_path, save_path):
 
 
 if '__main__' == __name__:
+    if not os.path.exists('./dataset'):
+        os.mkdir("./dataset")
     txt2tfrecords(sys.argv[1], "./dataset/")
