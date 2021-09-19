@@ -370,7 +370,7 @@ class GenerateModel:
 def inference(args):
     cos_theta = []
     dataset = DatasetLoader('./dataset/' + args.dataset + '.tfrecords', 256, 1)
-    condition, generator = GenerateModel(64).get_model('./weights/')
+    condition, generator = GenerateModel(64).get_model('./weights/' + args.model_name + '/')
     while True:
         try:
             identity, momentum, mask = dataset.get_batch()
