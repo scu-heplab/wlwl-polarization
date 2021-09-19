@@ -79,7 +79,7 @@ def parse_args():
     print('Model name:', args.model_name)
     print('Collider energy:', str(args.energy_level) + 'TeV')
     print('===============================================')
-    return
+    return args
 
 
 def fit_fraction(theta, model_name, energy_level):
