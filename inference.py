@@ -290,7 +290,6 @@ class ClassifyModel:
         global_pool = tf.keras.layers.GlobalAveragePooling1D()(encoder)
         feature = tf.keras.layers.Activation(tf.nn.tanh)(global_pool)
         self.classify = tf.keras.Model(inputs=[identity_inputs, momentum_inputs, mask_inputs], outputs=feature)
-        self.classify.summary()
 
     def get_model(self, weight_path=None):
         if weight_path is not None:
@@ -336,26 +335,6 @@ class GenerateModel:
         theta = tf.keras.layers.Add()([add, theta])
 
         self.generator = tf.keras.Model(inputs=[condition_inputs, noise_inputs], outputs=theta)
-        self.generator.summary()
-
-    def predict(self, tf_records_path):
-        dataset = DatasetLoader(tf_records_path, 256, 1)
-        pf = []
-        nf = []
-        while True:
-            try:
-                identity, momentum, mask = dataset.get_batch()
-                condition = self.condition([identity, momentum, mask], training=False)
-                noise_inputs = tf.random.normal((tf.shape(mask)[0], 64, self.noise_dim))
-                fake_theta = self.generator([condition, noise_inputs])
-
-                fake_theta = tf.reduce_mean(fake_theta, -1)
-                pf.append(fake_theta[:, 0])
-                nf.append(fake_theta[:, 1])
-            except StopIteration:
-                pf = np.concatenate(pf, 0)
-                nf = np.concatenate(nf, 0)
-                break
 
     def get_model(self, path=None):
         if path is not None:
