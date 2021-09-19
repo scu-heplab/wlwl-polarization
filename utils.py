@@ -1,7 +1,9 @@
+import argparse
 import numpy as np
 
 
-def particle_swarm_optimization(fitness_func, particle_num, dim, weight=0.6, c1=2, c2=2, iter_num=1000, eq_func=None, eq_weight=None, neq_func=None, neq_weight=None):
+def particle_swarm_optimization(fitness_func, particle_num, dim, weight=0.6, c1=2, c2=2, iter_num=1000, eq_func=None, eq_weight=None, neq_func=None,
+                                neq_weight=None):
     particle = np.random.uniform(0, 1, (particle_num, dim))
     velocity = np.random.uniform(0, 1, (particle_num, dim))
 
@@ -59,7 +61,25 @@ def chi_square(observe, template):
         theory = np.sum(factor[:, np.newaxis, np.newaxis] * template[np.newaxis], -1)
         loss = np.sum(np.square(observe[np.newaxis] - theory) / theory, (1, 2)) / (10 ** 2 - 4)
         return loss
+
     return calc_loss
+
+
+def parse_args():
+    desc = "Measure WWjj polarization fraction."
+    parse = argparse.ArgumentParser(description=desc)
+    parse.add_argument('--dataset', type=str, default='sm', help='The name of the transformed dataset, without filename extension.')
+    parse.add_argument('--model_name', type=str, default='TRANS', help='The name of the model making the prediction. <TRANS, TRAMI, TMIPCC>')
+    parse.add_argument('--energy_level', type=int, default=13, help='Collider energy level used. <13, 100>')
+    args = parse.parse_args()
+    assert args.model_name == 'TRANS' or args.model_name == 'TRAMI' or args.model_name == 'TMIPCC', '`model_name` can only be <TRANS, TRAMI, TMIPCC>'
+    assert args.energy_level == 13 or args.energy_level == 100, '`energy_level` can only be <13, 100>'
+    print('===============================================')
+    print('Dataset name:', args.dataset)
+    print('Model name:', args.model_name)
+    print('Collider energy:', str(args.energy_level) + 'TeV')
+    print('===============================================')
+    return
 
 
 def fit_fraction(theta, model_name, energy_level):
