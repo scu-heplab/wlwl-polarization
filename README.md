@@ -25,7 +25,7 @@ __<p align=center>Measure WWjj polarization fraction</p>__
 The raw dataset needs to be transformed before it can be imported into the model.
 * You need to create a raw dataset(we provide a test dataset, stored in `./raw/`), the data structure is as follows:
 ```
-The file has N events
+The file has N events:
    Event 1
    Event 2
    ...
