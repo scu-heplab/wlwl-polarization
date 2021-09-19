@@ -1,6 +1,8 @@
 # WlWl Polarization
 Measure WWjj polarization fraction 
 
+![sm](https://github.com/shen/SwiftNotes/blob/master/image/1.png)
+
 Paper:xxxxxxxxxxxxxx
 
 ___Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).___
