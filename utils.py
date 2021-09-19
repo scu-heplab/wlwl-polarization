@@ -87,6 +87,6 @@ def fit_fraction(theta, model_name, energy_level):
     neq_func = [lambda args: args[:, 0], lambda args: args[:, 1], lambda args: args[:, 2], lambda args: args[:, 3],
                 lambda args: 1 - args[:, 0], lambda args: 1 - args[:, 1], lambda args: 1 - args[:, 2], lambda args: 1 - args[:, 3]]
     temp = np.load('./temp/' + model_name + '/' + 'temp_' + energy_level + '.npy')
-    param = particle_swarm_optimization(chi_square(theta, temp), 1000, 4, iter_num=1000,
+    param = particle_swarm_optimization(chi_square(theta * 3000, temp * 3000), 1000, 4, iter_num=1000,
                                         eq_func=eq_func, eq_weight=100, neq_func=neq_func, neq_weight=100)
-    print('pred:', np.round(param, 5), 'loss:', chi_square(theta, temp)(param[np.newaxis]))
+    print('pred:', np.round(param, 5), 'loss:', chi_square(theta * 3000, temp * 3000)(param[np.newaxis]))
