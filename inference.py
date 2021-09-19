@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import tensorflow as tf
-from utils.py import fit_fraction
+from utils import parse_args, fit_fraction
 
 
 class DatasetLoader:
@@ -367,9 +367,9 @@ class GenerateModel:
         self.generator.set_weights(np.load(path + 'generator.npy', allow_pickle=True))
 
 
-def inference(tf_records_path):
+def inference(args):
     cos_theta = []
-    dataset = DatasetLoader(tf_records_path, 256, 1)
+    dataset = DatasetLoader('./dataset/' + args.dataset + '.tfrecords', 256, 1)
     condition, generator = GenerateModel(64).get_model('./weights/')
     while True:
         try:
@@ -381,8 +381,8 @@ def inference(tf_records_path):
             cos_theta = np.concatenate(cos_theta, 0)
             break
     theta_bins = np.histogramdd(cos_theta, 10, ((-1, 1), (-1, 1)), density=True)[0] * (2 / 10) ** 2
-    fit_fraction(theta_bins, 'TRANS', '13tev')
+    fit_fraction(theta_bins, args.model_name, str(args.energy_level) + 'tev')
 
 
 if __name__ == '__main__':
-    inference('')
+    inference(parse_args())
