@@ -1,9 +1,13 @@
 # WlWl Polarization
 Measure WWjj polarization fraction 
 
-![sm](./result/sm.png)
-![sm_lltt](./result/sm_lltt.png)
-![sm_lttl](./result/sm_lttl.png)
+<div align=center>
+   <figure>
+      <img src="./result/sm.png" />
+      <img src="./result/sm_lltt.png" />
+      <img src="./result/sm_lttl.png" />
+   </figure>
+</div>
 
 Paper:xxxxxxxxxxxxxx
 
