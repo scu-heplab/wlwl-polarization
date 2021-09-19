@@ -15,8 +15,8 @@ ___Notice: This code can only use the inference process, if you want to train yo
 ## Requirements
 * Both Linux and Windows are supported.
 * 64-bit Python3.6(or higher) installation.
-* Tensorflow2.x(recommend 2.6), Numpy.
-* One or more high-end NVIDIA GPUs(at least 4 GB of DRAM), NVIDIA drivers, CUDA 11.4 toolkit and cuDNN 8.4.
+* Tensorflow2.x(recommend 2.6), Numpy(recommend 1.19.5).
+* One or more high-end NVIDIA GPUs(at least 4 GB of DRAM), NVIDIA drivers, CUDA(recommend 11.4) toolkit and cuDNN(recommend 8.4).
 
 ## Preparing dataset
 The raw dataset needs to be transformed before it can be imported into the model.
