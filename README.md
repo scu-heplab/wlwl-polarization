@@ -1,9 +1,7 @@
 # WlWl Polarization
 Measure WWjj polarization fraction 
 
-[sm](https://github.com/scu-heplab/wlwl-polarization/blob/main/result/sm.pdf)
-[sm_lltt](https://github.com/scu-heplab/wlwl-polarization/blob/main/result/sm_lltt.pdf)
-[sm_lttl](https://github.com/scu-heplab/wlwl-polarization/blob/main/result/sm_lttl.pdf)
+<img src="https://github.com/scu-heplab/wlwl-polarization/blob/main/result/sm.png" width="400" height="400" alt="微信小程序"/><br/>
 
 Paper:xxxxxxxxxxxxxx
 
