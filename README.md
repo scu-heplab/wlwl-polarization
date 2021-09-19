@@ -8,7 +8,7 @@ __<p align=center>Measure WWjj polarization fraction</p>__
       <img src="./result/sm_lttl.png" alt="sm_lttl"/>
    </figure>
 </div>
-
+1
 Paper:[click here to open baidu](https://www.baidu.com)  
 ___Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).___
 
