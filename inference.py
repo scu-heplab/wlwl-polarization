@@ -351,8 +351,8 @@ def plot(cos_theta, args):
     plt.yticks([])
     plt.title(args.dataset + ' [' + args.model_name + ']', fontsize=19)
     plt.savefig('./result/' + args.dataset + '_' + args.model_name + '_' + str(args.energy_level) + 'TeV.pdf', dpi=600, format='pdf', bbox_inches='tight')
-    print('save cos_theta distribution to: ' + './result/' + args.dataset + '_' + args.model_name + '_' + str(args.energy_level) + 'TeV.pdf')
-    print('===============================================')
+    print('Save cos_theta distribution to: ' + './result/' + args.dataset + '_' + args.model_name + '_' + str(args.energy_level) + 'TeV.pdf')
+    print('\n===============================================')
 
 
 def inference(args):
