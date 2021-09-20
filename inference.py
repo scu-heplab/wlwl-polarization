@@ -289,21 +289,16 @@ class ClassifyModel:
         encoder = get_encoder(encoder, mask_inputs)
         global_pool = tf.keras.layers.GlobalAveragePooling1D()(encoder)
         feature = tf.keras.layers.Activation(tf.nn.tanh)(global_pool)
-        self.classify = tf.keras.Model(inputs=[identity_inputs, momentum_inputs, mask_inputs], outputs=feature)
+        self.condition = tf.keras.Model(inputs=[identity_inputs, momentum_inputs, mask_inputs], outputs=feature)
 
-    def get_model(self, weight_path=None):
-        if weight_path is not None:
-            self.load_model(weight_path)
-        return self.classify
-
-    def load_model(self, path):
-        self.classify.load_weights(path + 'classify.h5', True, True)
+    def get_model(self):
+        return self.condition
 
 
 class GenerateModel:
-    def __init__(self, noise_dim, particle_nums=6, embedding_size=64, head_nums=4, head_size=16, hide_dim=128, condition_weight_dir_path=None):
+    def __init__(self, noise_dim, particle_nums=6, embedding_size=64, head_nums=4, head_size=16, hide_dim=128):
         self.noise_dim = noise_dim
-        self.condition = ClassifyModel(particle_nums, embedding_size, head_nums, head_size, hide_dim).get_model(condition_weight_dir_path)
+        self.condition = ClassifyModel(particle_nums, embedding_size, head_nums, head_size, hide_dim).get_model()
 
         condition_inputs = tf.keras.layers.Input((embedding_size,))
 
@@ -342,7 +337,7 @@ class GenerateModel:
         return self.condition, self.generator
 
     def load_model(self, path):
-        self.condition.load_weights(path + 'classify.h5', True, True)
+        self.condition.load_weights(path + 'condition.h5')
         self.generator.set_weights(np.load(path + 'generator.npy', allow_pickle=True))
 
 
