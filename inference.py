@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import tensorflow as tf
+from matplotlib import pyplot as plt
 from utils import parse_args, fit_fraction
 
 
@@ -341,6 +342,18 @@ class GenerateModel:
         self.generator.set_weights(np.load(path + 'generator.npy', allow_pickle=True))
 
 
+def plot(cos_theta, args):
+    plt.hist(cos_theta[:, 0], 50, (-1, 1), True, histtype='step', color='r', label='positive')
+    plt.hist(cos_theta[:, 1], 50, (-1, 1), True, histtype='step', color='b', label='negative')
+    plt.tick_params(labelsize=17)
+    plt.xlabel(r'$\cos \theta^*_{\ell^\pm}$', fontsize=17)
+    plt.legend(loc='lower center', fontsize=15)
+    plt.yticks([])
+    plt.title(args.dataset + ' [' + args.model_name + ']', fontsize=19)
+    plt.savefig('./result/' + args.dataset + '_' + args.model_name + '_' + str(args.energy_level) + 'TeV.pdf', dpi=600, format='pdf', bbox_inches='tight')
+    print('save cos_theta distribution to: ' + './result/' + args.dataset + '_' + args.model_name + '_' + str(args.energy_level) + 'TeV.pdf')
+
+
 def inference(args):
     cos_theta = []
     dataset = DatasetLoader('./dataset/' + args.dataset + '.tfrecords', 256, 1)
@@ -356,6 +369,7 @@ def inference(args):
             break
     theta_bins = np.histogramdd(cos_theta, 10, ((-1, 1), (-1, 1)), density=True)[0] * (2 / 10) ** 2
     fit_fraction(theta_bins, args.model_name, str(args.energy_level) + 'tev')
+    plot(cos_theta, args)
 
 
 if __name__ == '__main__':
