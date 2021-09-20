@@ -350,8 +350,8 @@ def plot(cos_theta, args):
     plt.legend(loc='lower center', fontsize=15)
     plt.yticks([])
     plt.title(args.dataset + ' [' + args.model_name + ']', fontsize=19)
-    plt.savefig('./result/' + args.dataset + '_' + args.model_name + '_' + str(args.energy_level) + 'TeV.pdf', dpi=600, format='pdf', bbox_inches='tight')
-    print('Save cos_theta distribution to: ' + './result/' + args.dataset + '_' + args.model_name + '_' + str(args.energy_level) + 'TeV.pdf')
+    plt.savefig('./result/' + args.dataset + '_' + args.model_name + '.pdf', dpi=600, format='pdf', bbox_inches='tight')
+    print('Save cos_theta distribution to: ' + './result/' + args.dataset + '_' + args.model_name + '.pdf')
     print('\n===============================================')
 
 
