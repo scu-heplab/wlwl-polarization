@@ -17,7 +17,7 @@ __<p align=center>Measure WWjj polarization fraction</p>__
 
 ## Requirements
 * Both Linux and Windows are supported.
-* 64-bit Python3.6(or higher) installation.
+* 64-bit Python3.6(or higher, recommend 3.8) installation.
 * Tensorflow2.x(recommend 2.6), Numpy(recommend 1.19.5).
 * One or more high-end NVIDIA GPUs(at least 4 GB of DRAM), NVIDIA drivers, CUDA(recommend 11.4) toolkit and cuDNN(recommend 8.2.x).
 
