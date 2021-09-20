@@ -54,7 +54,8 @@ ParticleID: 1 for electron, 2 for muon, 3 for tau, 4 for b-jet, 5 for normal jet
 ## Using pre-trained models
 After completing the preparation of the dataset, you can use the model to predict the polarization fraction.
 * Pre-trained weights are placed in `./weights/`.
-* Use the command `python inference.py --dataset YOUR_TRADATA_NAME --model_name <MODEL_NAME> --energy_level <ENERGY_LEVEL>`, it will give the polarization fraction.  
+* Use the command `python inference.py --dataset YOUR_TRADATA_NAME --model_name <MODEL_NAME> --energy_level <ENERGY_LEVEL>`, it will give the polarization fraction.
+
 ___Notice: <ENERGY_LEVEL> should correspond to the energy of the collision event.___
 ## Example
 Run the following command to get the polarization fraction of the standard model:
