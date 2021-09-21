@@ -11,7 +11,7 @@ __<p align=center>Measure WWjj polarization fraction</p>__
 <p>
    
    Paper: [click here to open baidu](https://www.baidu.com)  
-   ___Notice: This code can only use the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).___
+   ___Notice: This code can only be used for the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).___
    
 </p>
 
