@@ -56,7 +56,7 @@ After completing the preparation of the dataset, you can use the model to predic
 * Pre-trained weights are placed in `./weights/`.
 * Use the command `python inference.py --dataset YOUR_TRADATA_NAME --model_name <MODEL_NAME> --energy_level <ENERGY_LEVEL>`, it will give the polarization fraction.
 
-___Notice: <ENERGY_LEVEL> should correspond to the energy of the collision event.___
+___Notice: <ENERGY_LEVEL> should correspond to the collision energy of event.___
 ## Example
 Run the following command to get the polarization fraction of the standard model:
 ```
