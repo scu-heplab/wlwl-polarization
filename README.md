@@ -10,7 +10,7 @@ __<p align=center>Measure WWjj polarization fraction</p>__
 </div>
 <p>
    
-   Paper: [click here to open baidu](https://www.baidu.com)  
+   Paper: [arXiv:2109.xxxxx](https://arxiv.org/abs/2109.xxxxx)  
    ___Notice: This code can only be used for the inference process, if you want to train your own model, please contact [zhangrao@stu.scu.edu.cn](mailto:zhangrao@stu.scu.edu.cn).___
    
 </p>
