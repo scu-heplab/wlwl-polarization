@@ -65,12 +65,18 @@ python inference.py --dataset sm --model_name TRANS --energy_level 13
 ```
 ## Citation
 ```
-@misc{li2021polarization,
-    title={Polarization measurement for the dileptonic channel of $W^+ W^-$ scattering using generative adversarial network},
-    author={Jinmian Li and Cong Zhang and Rao Zhang},
-    year={2021},
-    eprint={2109.09924},
-    archivePrefix={arXiv},
-    primaryClass={hep-ph}
+@article{PhysRevD.105.016005,
+  title = {Polarization measurement for the dileptonic channel of ${W}^{+}{W}^{\ensuremath{-}}$ scattering using generative adversarial network},
+  author = {Li, Jinmian and Zhang, Cong and Zhang, Rao},
+  journal = {Phys. Rev. D},
+  volume = {105},
+  issue = {1},
+  pages = {016005},
+  numpages = {15},
+  year = {2022},
+  month = {Jan},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevD.105.016005},
+  url = {https://link.aps.org/doi/10.1103/PhysRevD.105.016005}
 }
 ```
